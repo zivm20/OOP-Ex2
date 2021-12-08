@@ -43,5 +43,8 @@ public class Point implements GeoLocation {
 		double distance = Math.pow(this.x - g.x(), 2) + Math.pow(this.y - g.y(), 2) + Math.pow(this.z - g.z(), 2);
 		return Math.sqrt(distance);
 	}
+	public String toString() {
+		return this.x+","+this.y+","+this.z;
+	}
 
 }

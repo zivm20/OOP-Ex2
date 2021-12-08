@@ -1,5 +1,7 @@
 package api_implementation;
 
+import java.util.HashMap;
+
 import api.EdgeData;
 
 
@@ -71,6 +73,14 @@ public class Edge implements EdgeData {
 	public void setTag(int t) {
 		this.tag = t;
 
+	}
+	@Override
+	public String toString() {
+		HashMap<String,String> out = new HashMap<String,String>();
+		out.put("src",this.src + "");
+		out.put("w",this.weight+"");
+		out.put("dest",this.dest+"");
+		return out.toString();
 	}
 
 }

@@ -1,11 +1,18 @@
 package api_implementation;
 
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.gson.*;
 
 import api.DirectedWeightedGraph;
 import api.EdgeData;
@@ -76,18 +83,55 @@ public class Graph implements DirectedWeightedGraph {
 			this.edgeMap.put(entry.getKey(), entry.getValue().getChildren().values());
 		}
 	}
-	
+	public Graph(String json_file) {
+		List<EdgeData> edgeDataList = new LinkedList<EdgeData>();
+		List<NodeData> nodeDataList = new LinkedList<NodeData>();
+		try {
+			Gson gson = new Gson();
+			Reader reader = Files.newBufferedReader(Paths.get(json_file));
+			
+			Map<?,?> json = gson.fromJson(reader,Map.class);
+			List<?> edges = (List<?>) json.get("Edges");
+			List<?> nodes = (List<?>) json.get("Nodes");
+			
+			for(Object obj: edges) {
+				Map<?,?> objMap = (Map<?,?>)obj;
+				int src = ((Double) objMap.get("src")).intValue();
+				double w = (double)objMap.get("w");
+				int dest = ((Double) objMap.get("dest")).intValue();
+				edgeDataList.add(new Edge(src,dest,w));
+			}
+			for(Object obj: nodes) {
+				Map<?,?> objMap = (Map<?,?>)obj;
+				String[] pos = ((String) objMap.get("pos")).split(",");
+				double x = Double.parseDouble(pos[0]);
+				double y = Double.parseDouble(pos[0]);
+				double z = Double.parseDouble(pos[0]);
+				int id = ((Double) objMap.get("id")).intValue();
+				
+				nodeDataList.add(new Node(id,new Point(x,y,z)));
+			}
+			
+			
+			reader.close();
+		}
+		catch (Exception ex) {
+		    ex.printStackTrace();
+		}
+		
+		init(nodeDataList,edgeDataList);
+	}
 	
 	/**
-	 * Constructor for graph
+	 * initiate our Graph
 	 * @param nodeList - Linked list of all the nodes on the graph
 	 * @param edgeList - Linked list of all the edges on the graph
 	 */
-	public Graph(LinkedList<NodeData> nodeList, LinkedList<EdgeData> edgeList) {
+	private void init(List<NodeData> nodeList, List<EdgeData> edgeList) {
 		this.nodes = new HashMap<Integer, NodeStructure>();
 		this.edgeMap = new HashMap<Integer, Collection<EdgeData>>();
-		this.edgeList = edgeList;
-		this.nodeList = nodeList;
+		this.edgeList = new LinkedList<EdgeData>(edgeList);
+		this.nodeList = new LinkedList<NodeData>(nodeList);
 		this.graphChanged = false;
 		this.edgeSize = 0;
 		
@@ -130,8 +174,9 @@ public class Graph implements DirectedWeightedGraph {
 		if(this.nodes.containsKey(src) && this.nodes.containsKey(dest) && !this.nodes.get(src).getChildren().containsKey(dest)) {
 			this.graphChanged = true;
 			this.edgeSize++;
-			this.nodes.get(src).addChild(dest, new Edge(src,dest,w));
-			this.nodes.get(dest).addParent(src, new Edge(src,dest,w));
+			Edge e = new Edge(src,dest,w);
+			this.nodes.get(src).addChild(dest, e);
+			this.nodes.get(dest).addParent(src, e);
 		}
 	}
 
@@ -212,6 +257,39 @@ public class Graph implements DirectedWeightedGraph {
 			}
 		}
 		return maxEdges;
+	}
+	
+	/**
+	 * updates the graph to apply the changes to it
+	 */
+	public void update() {
+		LinkedList<EdgeData> edge_list = new LinkedList<EdgeData>();
+		LinkedList<NodeData> node_list = new LinkedList<NodeData>();
+		for(NodeStructure node: this.nodes.values()) {
+			for(EdgeData edge: node.getChildren().values()) {
+				if(!edge_list.contains(edge)) {
+					edge_list.add(edge);
+				}
+			}
+			node_list.add(node.get());
+		}
+		init(node_list,edge_list);
+	}
+	@Override
+	public String toString() {
+		ArrayList<String> edge_arr = new ArrayList<String>();
+		ArrayList<String> node_arr = new ArrayList<String>();
+		update();
+		for(EdgeData e: this.edgeList) {
+			edge_arr.add(e.toString());
+		}
+		for(NodeData n: this.nodeList) {
+			node_arr.add(n.toString());
+		}
+		HashMap<String,String> out = new HashMap<String,String>();
+		out.put("Edges", edge_arr.toString());
+		out.put("Nodes",node_arr.toString());
+		return out.toString();
 	}
 
 }

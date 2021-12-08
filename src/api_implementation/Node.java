@@ -1,5 +1,7 @@
 package api_implementation;
 
+import java.util.HashMap;
+
 import api.GeoLocation;
 import api.NodeData;
 
@@ -81,6 +83,13 @@ public class Node implements NodeData {
 	@Override
 	public void setTag(int t) {
 		this.tag = t;
+	}
+	
+	public HashMap<String,String> toStringMap() {
+		HashMap<String,String> out = new HashMap<String,String>();
+		out.put("pos",this.point.toString());
+		out.put("id", this.key+"");
+		return out;
 	}
 
 }

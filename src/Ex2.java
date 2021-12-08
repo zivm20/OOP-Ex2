@@ -1,10 +1,16 @@
+
+
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
+import api_implementation.Graph;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
  */
 public class Ex2 {
+	public static void main(String[] args) {
+		getGrapg("G1.json");
+	}
     /**
      * This static function will be used to test your implementation
      * @param json_file - a json file (e.g., G1.json - G3.gson)
@@ -13,7 +19,10 @@ public class Ex2 {
     public static DirectedWeightedGraph getGrapg(String json_file) {
         DirectedWeightedGraph ans = null;
         // ****** Add your code here ******
-        //
+        
+        ans = new Graph("data/"+json_file);
+        
+        
         // ********************************
         return ans;
     }
