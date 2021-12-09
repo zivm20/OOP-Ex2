@@ -85,11 +85,11 @@ public class Node implements NodeData {
 		this.tag = t;
 	}
 	
-	public HashMap<String,String> toStringMap() {
+	public String toString() {
 		HashMap<String,String> out = new HashMap<String,String>();
 		out.put("pos",this.point.toString());
 		out.put("id", this.key+"");
-		return out;
+		return out.toString();
 	}
 
 }

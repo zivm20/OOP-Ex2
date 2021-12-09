@@ -61,6 +61,11 @@ public class Graph implements DirectedWeightedGraph {
 	boolean graphChanged;
 	int edgeSize;
 	
+	
+	public Graph(List<NodeData> nodeList, List<EdgeData> edgeList) {
+		init(nodeList,edgeList);
+	}
+	
 	/**
 	 * Copy constructor
 	 * @param g DirectedWeightedGraph to copy
@@ -83,6 +88,10 @@ public class Graph implements DirectedWeightedGraph {
 			this.edgeMap.put(entry.getKey(), entry.getValue().getChildren().values());
 		}
 	}
+	/**
+	 * Constructor from json file
+	 * @param json_file - json file name in data/
+	 */
 	public Graph(String json_file) {
 		List<EdgeData> edgeDataList = new LinkedList<EdgeData>();
 		List<NodeData> nodeDataList = new LinkedList<NodeData>();
