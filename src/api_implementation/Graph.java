@@ -4,7 +4,6 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,6 +13,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.google.gson.*;
+
 
 import api.DirectedWeightedGraph;
 import api.EdgeData;
@@ -115,11 +115,12 @@ public class Graph implements DirectedWeightedGraph {
 				Map<?,?> objMap = (Map<?,?>)obj;
 				String[] pos = ((String) objMap.get("pos")).split(",");
 				double x = Double.parseDouble(pos[0]);
-				double y = Double.parseDouble(pos[0]);
-				double z = Double.parseDouble(pos[0]);
+				double y = Double.parseDouble(pos[1]);
+				double z = Double.parseDouble(pos[2]);
 				int id = ((Double) objMap.get("id")).intValue();
+				NodeData n = new Node(id,new Point(x,y,z));
+				nodeDataList.add(n);
 				
-				nodeDataList.add(new Node(id,new Point(x,y,z)));
 			}
 			
 			
@@ -249,14 +250,33 @@ public class Graph implements DirectedWeightedGraph {
 			@Override
 			public boolean hasNext() {
 				validate();
-				if(this.nodeIt.hasNext())
-					return this.nodeIt.hasNext();
-				return this.edgeIt != null && this.edgeIt.hasNext();
+				
+				if( this.edgeIt != null) {
+					if(this.edgeIt.hasNext()) {
+						return true;
+					}
+					while(!edgeIt.hasNext() && nodeIt.hasNext()) {
+						this.src = nodeIt.next().getKey();
+						this.edgeIt = edgeIter(this.src);
+					}
+					return edgeIt.hasNext();
+				}
+				else {
+					while(nodeIt.hasNext()) {
+						this.src = nodeIt.next().getKey();
+						this.edgeIt = edgeIter(this.src);
+						if(edgeIt.hasNext()) {
+							return true;
+						}
+					}
+				}
+				
+				return false;
 			}
 			@Override
 			public EdgeData next() {
 				validate();
-				while(this.nodeIt.hasNext() && this.edgeIt == null || !this.edgeIt.hasNext()) {
+				while(this.nodeIt.hasNext() && (this.edgeIt == null || !this.edgeIt.hasNext())) {
 					this.src = nodeIt.next().getKey();
 					this.edgeIt = edgeIter(this.src);
 				}
@@ -410,7 +430,9 @@ public class Graph implements DirectedWeightedGraph {
 		HashMap<String,String> out = new HashMap<String,String>();
 		out.put("Edges", edge_arr.toString());
 		out.put("Nodes",node_arr.toString());
-		return out.toString();
+		String s = out.toString();
+		
+		return s.replace("=", ":");
 	}
 
 }

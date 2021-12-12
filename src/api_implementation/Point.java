@@ -36,7 +36,7 @@ public class Point implements GeoLocation {
 
 	@Override
 	public double z() {
-		return this.y;
+		return this.z;
 	}
 	@Override
 	public double distance(GeoLocation g) {
@@ -44,7 +44,7 @@ public class Point implements GeoLocation {
 		return Math.sqrt(distance);
 	}
 	public String toString() {
-		return this.x+","+this.y+","+this.z;
+		return ""+'"'+this.x+","+this.y+","+this.z+'"';
 	}
 
 }

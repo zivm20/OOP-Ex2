@@ -20,29 +20,29 @@ class testGraph {
 	
 	@Test
 	void test_getNode() {
-		 GeoLocation p1 = new Point(1,2,0);
-		 GeoLocation p2 = new Point(7,4,0);
-		 GeoLocation p3 = new Point(8,3,0);
-		 GeoLocation p4 = new Point(12,8,0);
-		 NodeData n1 = new Node(0,p1);
-		 NodeData n2 = new Node(4,p2);
-		 NodeData n3 = new Node(1,p3);
-		 NodeData n4 = new Node(2,p4);
-		 LinkedList<NodeData> nodes = new LinkedList<NodeData>();
-		 LinkedList<EdgeData> edges = new LinkedList<EdgeData>();
-		 nodes.add(n1);
-		 nodes.add(n2);
-		 nodes.add(n3);
-		 nodes.add(n4);
-		 DirectedWeightedGraph g = new Graph(nodes,edges);
-		 //test that we actually get a node
-		 assertTrue(g.getNode(0).equals(n1));
-		 //test that the nodes we get are returned by the node's key value and not the order inputed
-		 assertTrue(g.getNode(1).equals(n3));
-		 assertTrue(g.getNode(2).equals(n4));
-		 //test that the program returns null if no node was found
-		 assertTrue(g.getNode(3) == null);
-		 assertTrue(g.getNode(4).equals(n2));
+		GeoLocation p1 = new Point(1,2,0);
+		GeoLocation p2 = new Point(7,4,0);
+		GeoLocation p3 = new Point(8,3,0);
+		GeoLocation p4 = new Point(12,8,0);
+		NodeData n1 = new Node(0,p1);
+		NodeData n2 = new Node(4,p2);
+		NodeData n3 = new Node(1,p3);
+		NodeData n4 = new Node(2,p4);
+		LinkedList<NodeData> nodes = new LinkedList<NodeData>();
+		LinkedList<EdgeData> edges = new LinkedList<EdgeData>();
+		nodes.add(n1);
+		nodes.add(n2);
+		nodes.add(n3);
+		nodes.add(n4);
+		DirectedWeightedGraph g = new Graph(nodes,edges);
+		//test that we actually get a node
+		assertTrue(g.getNode(0).equals(n1));
+		//test that the nodes we get are returned by the node's key value and not the order inputed
+		assertTrue(g.getNode(1).equals(n3));
+		assertTrue(g.getNode(2).equals(n4));
+		//test that the program returns null if no node was found
+		assertTrue(g.getNode(3) == null);
+		assertTrue(g.getNode(4).equals(n2));
 		 
 		
 	}

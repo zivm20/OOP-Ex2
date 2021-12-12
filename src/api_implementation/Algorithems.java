@@ -50,7 +50,9 @@ public class Algorithems implements DirectedWeightedGraphAlgorithms {
 	public Algorithems(String json) {
 		load(json);
 	}
-	
+	public Algorithems(DirectedWeightedGraph g) {
+		init(g);
+	}
 	
 	@Override
 	public void init(DirectedWeightedGraph g) {
@@ -93,10 +95,11 @@ public class Algorithems implements DirectedWeightedGraphAlgorithms {
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		
-		return pathLength(shortestPath(src,dest));
+		return this.floydMatrix.get(src).get(dest).getValue();
 	}
 	@Override
 	public List<NodeData> shortestPath(int src, int dest) {
+		//RESTORE FROM FLOYED MATRIX WITHOUT USING A LINKED LIST
 		return this.floydMatrix.get(src).get(dest).getPath();
 	}
 	/**
@@ -164,6 +167,7 @@ public class Algorithems implements DirectedWeightedGraphAlgorithms {
 		//unless the vertex is given as a requirement, in that case we will change path_a_to_b to path_a_to_vertex + path_vertex_to_b
 		//regardless
 		for(Iterator<NodeData> iter1 = this.graph.nodeIter(); iter1.hasNext();) {
+			
 			int matrixNum = iter1.next().getKey();
 			matrix = new HashMap<Integer,HashMap<Integer,FloydElement>>();
 			
@@ -210,6 +214,7 @@ public class Algorithems implements DirectedWeightedGraphAlgorithms {
 				int i = iter2.next().getKey();
 				lastMatrix.put(i, new HashMap<Integer,FloydElement>(matrix.get(i)));
 			}
+			System.out.println("done layer " + matrixNum);
 			
 		}
 		return matrix;
@@ -247,7 +252,7 @@ public class Algorithems implements DirectedWeightedGraphAlgorithms {
 	}
 
 	@Override
-	public List<NodeData> tsp(List<NodeData> cities) {
+	public List<NodeData> tsp(List<NodeData> cities) {		
 		//generateFloydWarshallMatrix(req) makes a floyd matrix such that each path contains the requirements
 		HashMap<Integer,HashMap<Integer,FloydElement>> floydMatrix_requirements = generateFloydWarshallMatrix(cities);
 		LinkedList<NodeData> bestPath = floydMatrix_requirements.get(cities.get(0).getKey()).get(cities.get(cities.size()-1).getKey()).getPath();
