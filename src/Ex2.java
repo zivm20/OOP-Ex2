@@ -1,18 +1,13 @@
 
 
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.EdgeData;
-import api.GeoLocation;
 import api.NodeData;
 import api_implementation.Algorithems;
-import api_implementation.Edge;
 import api_implementation.Graph;
-import api_implementation.Node;
-import api_implementation.Point;
 import processing.core.*;
 
 /**
@@ -72,6 +67,7 @@ public class Ex2 extends PApplet{
 		edges.add(e11);
 		
 		*/
+		/*
 		LinkedList<NodeData> nodes = new LinkedList<NodeData>();
 		LinkedList<EdgeData> edges = new LinkedList<EdgeData>();
 		for(int i = 0; i<10000; i++) {
@@ -93,22 +89,22 @@ public class Ex2 extends PApplet{
 		System.out.println("init graph");
 		DirectedWeightedGraphAlgorithms alg = new Algorithems(g);
 		System.out.println("init Algorithm");
-		String name = "10000";
+		
 		System.out.println(alg.save("data/"+name+".json"));
 		System.out.println(alg.isConnected());
 		
+		*/
+		String name = "2-5-4faster";
 		
 		
 		
-		
-		/*
 		if(args.length == 1) {
 			runGUI("data/"+args[0]);
 		}
 		else {
 			runGUI("data/"+name+".json");
 		}
-		*/
+		
 		
 	}
     /**
@@ -189,9 +185,15 @@ public class Ex2 extends PApplet{
     		stroke(0);
     		NodeData node = nodeIter.next();
     		pushMatrix();
+    		textAlign(LEFT);
+    		textSize((float)(20/Math.min(scaleX,scaleY)));
+    		text(node.getKey(),(float)(((20/scaleX))+node.getLocation().x()-minX), (float)(-((20/scaleY))+node.getLocation().y()-minY));
+    		
+    		
     		translate((float)(node.getLocation().x()-minX),(float)(node.getLocation().y()-minY));
     		float size = 20;
     		ellipse((float)0,(float)0,(float)(size/scaleX),(float)(size/scaleY));
+    		
     		popMatrix();
     		
     	}
@@ -234,9 +236,7 @@ public class Ex2 extends PApplet{
     		double[] point2= getPoint(intersection[0],intersection[1],intersection[0]-1,tempY2, Math.max(scaleX,scaleY)*0.4*distance/Math.pow(3, 2) );
     		stroke(255,0,0);
     		fill(255,0,0);
-    		GeoLocation base = new Point(intersection[0],intersection[1],0);
-    		GeoLocation p1 = new Point(point1[0],point1[1],0);
-    		GeoLocation p2 = new Point(point2[0],point2[1],0);
+    		
     		
     		
     		triangle(x2,y2,(float)(point1[0]),(float)point1[1],(float)point2[0],(float)point2[1]);
@@ -278,9 +278,7 @@ public class Ex2 extends PApplet{
     	scaleX = ((width*0.8)/scaleX);
     	scaleY = ((height*0.8)/scaleY);
     	nodeIter =  alg.getGraph().nodeIter();
-    	while(nodeIter.hasNext()) {
-    		NodeData node = nodeIter.next();
-    	}
+    	
     	
     
     }
