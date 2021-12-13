@@ -101,9 +101,6 @@ public class Ex2 extends PApplet{
     @Override
     public void draw() {
     	background(255);
-    	double mX = (mouseX)/scaleX + minX;
-    	double mY = (mouseY)/scaleY + minY;
-    	text(mX + ", " + mY, mouseX,mouseY );
     	translate( (float)Math.max((width*0.9-height*0.9)/2,0),(float)Math.max((height*0.9-width*0.9)/2,0));
     	
     	pushMatrix();
@@ -112,7 +109,7 @@ public class Ex2 extends PApplet{
     	scale((float)scaleX,(float)scaleY);
     	
     	Iterator<NodeData> nodeIter =  alg.getGraph().nodeIter();
-    	strokeWeight((float)(1/Math.max(scaleX,scaleY)));
+    	noStroke();
     	while(nodeIter.hasNext()) {
     		fill(0);
     		stroke(0);
@@ -121,14 +118,17 @@ public class Ex2 extends PApplet{
     		if(marked_nodes.contains(node)) {
     			fill(0,255,0);
     		}
+    		
     		translate((float)(node.getLocation().x()-minX),(float)(node.getLocation().y()-minY));
     		float size = 20;
+    		
     		ellipse((float)0,(float)0,(float)(size/scaleX),(float)(size/scaleY));
     		popMatrix();
     	}
     	Iterator<EdgeData> edgeIter =  alg.getGraph().edgeIter();
+    	strokeWeight((float)(5/Math.max(scaleX,scaleY)));
     	while(edgeIter.hasNext()) {
-    		fill(0);
+    		noFill();
     		stroke(0);
     		EdgeData edge = edgeIter.next();
     		NodeData node1 = alg.getGraph().getNode(edge.getSrc());
@@ -197,20 +197,24 @@ public class Ex2 extends PApplet{
     		choose_2 = 0;
     	}
     }
-    public void mousePressed() {
+    public void mouseClicked() {
     	double dist = Double.MAX_VALUE;
     	NodeData n = null;
     	
-    	double mX = (mouseX)/scaleX + minX - (float)Math.max((width*0.9-height*0.9)/2,0);
-    	double mY = (mouseY)/scaleY + minY - (float)Math.max((width*0.9-height*0.9)/2,0);
-    	ellipse((float)mX,(float)mY,20,20);
+    	double mX = (mouseX - (width*0.1)-(float)Math.max((width*0.9-height*0.9)/2,0))/scaleX ;
+    	double mY = (mouseY - (height*0.1)-(float)Math.max((width*0.9-height*0.9)/2,0) )/scaleY;
+    	
     	GeoLocation mouse = new Point(mX,mY,0);
     	Iterator<NodeData> nodeIter =  alg.getGraph().nodeIter();
     	while(nodeIter.hasNext()) {
     		NodeData node = nodeIter.next();
-    		if(dist > node.getLocation().distance(mouse)) {
+    		double nodeX = (node.getLocation().x()-minX);
+    		double nodeY = (node.getLocation().y()-minY);
+    		GeoLocation nodeLoc = new Point(nodeX,nodeY,0);
+    		
+    		if(dist > nodeLoc.distance(mouse)) {
     			n = node;
-    			dist = node.getLocation().distance(mouse);
+    			dist = nodeLoc.distance(mouse);
     		}
     	}
     	
@@ -224,7 +228,15 @@ public class Ex2 extends PApplet{
     			marked_nodes.add(n);
     			choose_2++;
     		}
+    		if(choose_2 == 2) {
+    			marked_nodes = alg.shortestPath(marked_nodes.get(0).getKey(),marked_nodes.get(marked_nodes.size()-1).getKey());
+    			marked_edges = new  LinkedList<EdgeData>();
+    			for(int i = 0; i<marked_nodes.size()-1; i++) {
+    				marked_edges.add(alg.getGraph().getEdge(marked_nodes.get(i).getKey(), marked_nodes.get(i+1).getKey()));
+    			}
+    		}
     	}
+    	
     }
     
     
