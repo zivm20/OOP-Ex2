@@ -8,7 +8,9 @@ To load a json file place the json file in the data folder then you may call use
 Controls:
 
 t - enter selection mode, click with your mouse on nodes and when you are done click t again, this will highlight the path found using the tsp algorithm with the nodes you selected
+ 
 p - click 2 nodes and it will automatically show the fastest path
+ 
 c - highlight the center node
 
 
@@ -25,9 +27,13 @@ This allows us to get O(1) for insertion and search of edges and nodes, O(1) for
 
 
 For the graph algorithems i used the following algorithms:
+ 
 floyd-warshall algorithm to find the center node in the graph: http://www.graph-magics.com/articles/center.php
+ 
 dynamic programing solution for the Traveling Salesperson Problem: https://www.youtube.com/watch?v=XaXsJJh-Q5Y
+ 
 simple dfs to find the fastest path
+ 
 Kosaraju’s DFS based algorithm to check if the graph is connected: https://www.geeksforgeeks.org/connectivity-in-a-directed-graph/
 
 
