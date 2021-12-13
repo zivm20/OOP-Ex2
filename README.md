@@ -3,7 +3,7 @@
 Instructions:
 
 To load a json file place the json file in the data folder then you may call use the command "java -jar Ex2.jar <your json>" to run the gui
-
+ \n
  
 
 Controls:
