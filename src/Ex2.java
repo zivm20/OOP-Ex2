@@ -19,9 +19,6 @@ import processing.core.*;
  */
 public class Ex2 extends PApplet{
 	public static void main(String[] args)  {
-	
-		
-		
 		
 		if(args.length == 1) {
 			runGUI("data/"+args[0]);
@@ -112,7 +109,7 @@ public class Ex2 extends PApplet{
     	noStroke();
     	while(nodeIter.hasNext()) {
     		fill(0);
-    		stroke(0);
+    		noStroke();
     		NodeData node = nodeIter.next();
     		pushMatrix();
     		if(marked_nodes.contains(node)) {
@@ -133,21 +130,37 @@ public class Ex2 extends PApplet{
     		EdgeData edge = edgeIter.next();
     		NodeData node1 = alg.getGraph().getNode(edge.getSrc());
     		NodeData node2 = alg.getGraph().getNode(edge.getDest());
-    		if(marked_edges.contains(edge)) {
-    			fill(0,255,0);
-    			stroke(0,255,0);
-    		}
+    		
+    			
+    		strokeWeight((float)(5/Math.max(scaleX,scaleY)));
+    		
     		float x1 = (float)(node1.getLocation().x()-minX);
     		float x2 = (float)(node2.getLocation().x()-minX);
     		float y1 = (float)(node1.getLocation().y()-minY);
     		float y2 = (float)(node2.getLocation().y()-minY);
     		line(x1,y1,x2,y2);
     	}
+    	for(EdgeData edge: marked_edges) {
+    		noFill();
+    		stroke(0,255,0);
+    		NodeData node1 = alg.getGraph().getNode(edge.getSrc());
+    		NodeData node2 = alg.getGraph().getNode(edge.getDest());
+    		
+    		
+    		strokeWeight((float)(5/Math.max(scaleX,scaleY)));
+    		
+    		float x1 = (float)(node1.getLocation().x()-minX);
+    		float x2 = (float)(node2.getLocation().x()-minX);
+    		float y1 = (float)(node1.getLocation().y()-minY);
+    		float y2 = (float)(node2.getLocation().y()-minY);
+    		line(x1,y1,x2,y2);
+    	}
+    	
     	popMatrix();
 
     	edgeIter =  alg.getGraph().edgeIter();
     	while(edgeIter.hasNext()) {
-    		fill(0);
+    		
     		EdgeData edge = edgeIter.next();
     		NodeData node1 = alg.getGraph().getNode(edge.getSrc());
     		NodeData node2 = alg.getGraph().getNode(edge.getDest());
@@ -166,6 +179,10 @@ public class Ex2 extends PApplet{
     		double[] point2= getPoint(intersection[0],intersection[1],intersection[0]-1,tempY2, ((scaleX+scaleY)/2)*0.4*distance/Math.pow(3, 2) );
     		stroke(255,0,0);
     		fill(255,0,0);
+    		if(marked_edges.contains(edge)) {
+    			fill(0,0,255);
+    			stroke(0,0,255);
+    		}
     		triangle(x2,y2,(float)(point1[0]),(float)point1[1],(float)point2[0],(float)point2[1]);
     	}
     	popMatrix();
