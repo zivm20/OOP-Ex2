@@ -1,12 +1,11 @@
 # OOP-Ex2
  
-Instructions:
+## Instructions:
 
 To load a json file place the json file in the data folder then you may call use the command "java -jar Ex2.jar <your json>" to run the gui
- \n
  
 
-Controls:
+## Controls:
 
 t - enter selection mode, click with your mouse on nodes and when you are done click t again, this will highlight the path found using the tsp algorithm with the nodes you selected
  
@@ -16,7 +15,7 @@ c - highlight the center node
 
 
  
-Information regarding the program:
+## Information regarding the program:
 
 In order to have high insertion speeds and high search speeds of nodes and edges on the graph I used the hashmap data structure so that each node is represented as a key-value pair where the key is the key of the node itself
 and the value is an object that contains the node itself and 2 hashmaps, one for the children and one for the parents of the node, each entry in both hashmaps is made like so
@@ -29,9 +28,7 @@ This allows us to get O(1) for insertion and search of edges and nodes, O(1) for
  
 
 
-For the graph algorithems i used the following algorithms:
- 
- 
+## For the graph algorithems i used the following algorithms:
  
 floyd-warshall algorithm to find the center node in the graph: http://www.graph-magics.com/articles/center.php
  
